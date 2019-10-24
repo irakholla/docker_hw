@@ -1,0 +1,30 @@
+version: "3"
+services:
+ server:
+  build: server/
+  image: irakholla/docker-compose:server
+  hostname: vm1 
+  networks:
+      static-network:
+        ipv4_address: 172.16.0.2
+  ports:
+   - 9870:9870
+   - 8088:8088
+  volumes: 
+   - ./opt/mount1:/opt/mount1
+   - ./opt/mount2:/opt/mount2
+ client:
+  build: client/
+  image: irakholla/docker-compose:client
+  hostname: vm2
+  networks:
+      static-network:
+        ipv4_address: 172.16.0.3
+  volumes:
+   - ./opt/mount1:/opt/mount1
+   - ./opt/mount2:/opt/mount2
+networks:
+  static-network:
+    ipam:
+      config:
+        - subnet: 172.16.0.0/16
